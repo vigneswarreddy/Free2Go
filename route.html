@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Route - Free2Go</title>
+
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.5s ease-out;
+        }
+        .animate-slide-in {
+            animation: slideIn 0.5s ease forwards;
+        }
+        .bg-gradient {
+            background: linear-gradient(135deg, #6ee7b7, #3b82f6);
+        }
+        #map {
+            height: 40vh;
+            min-height: 200px;
+            max-height: 450px;
+            width: 100%;
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(79, 70, 229, 0.2);
+        }
+        @media (min-width: 640px) {
+            #map {
+                height: 50vh;
+                max-height: 550px;
+            }
+        }
+        @media (min-width: 1024px) {
+            #map {
+                height: 70vh;
+                max-height: 650px;
+                width: 100%;
+            }
+        }
+        .route-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(240, 245, 255, 0.85));
+            backdrop-filter: blur(12px);
+        }
+        .route-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 1), rgba(240, 245, 255, 1));
+        }
+        .btn-gradient {
+            background: linear-gradient(135deg, #4F46E5, #3B82F6);
+            transition: all 0.3s ease;
+        }
+        .btn-gradient:hover {
+            background: linear-gradient(135deg, #4338CA, #2563EB);
+            transform: translateY(-2px);
+        }
+        /* Loading State */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .loading-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #ffffff;
+            border-top: 5px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        /* Night Mode */
+        .night-mode {
+            background: linear-gradient(135deg, #1e3a8a, #4c1d95);
+        }
+        .night-mode .route-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .night-mode .text-gray-900 {
+            color: #e5e7eb;
+        }
+        .night-mode .text-gray-600 {
+            color: #d1d5db;
+        }
+        .night-mode .bg-white {
+            background: rgba(31, 41, 55, 0.8);
+        }
+        .night-mode .bg-gray-50 {
+            background: rgba(55, 65, 81, 0.8);
+        }
+        /* Logo Positioning */
+        .logo-top-left {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1000;
+        }
+        .logo-bottom-right {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-indigo-50 to-gray-50 font-sans antialiased transition-colors duration-500" id="body">
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Top-Left Logo -->
+    
+    <img src="word logo 2.png" alt="Logo" class="logo-top-left w-23 h-8 sm:w-23 sm:h-14">
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-12 max-w-7xl">
+        <section class="text-center mb-8 sm:mb-10 lg:mb-12">
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 tracking-tight animate-slide-in">
+                <i class="fas fa-map-signs mr-2 text-indigo-600 animate-pulse"></i>Plan Your Journey
+            </h2>
+            <p class="mt-2 text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
+                Select the perfect route for your trip with real-time options tailored to your needs.
+            </p>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+            <!-- Map Section -->
+            <div class="lg:col-span-2 bg-white rounded-2xl shadow-lg overflow-hidden ring-1 ring-gray-200">
+                <div id="map"></div>
+            </div>
+
+            <!-- Route Selection Section -->
+            <div class="lg:col-span-1">
+                <div class="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-4 sm:p-6 space-y-4 sticky top-2 max-h-[calc(100vh-1rem)] overflow-y-auto">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-lg font-semibold text-gray-900">Available Routes</h3>
+                        <button id="themeToggle" class="text-gray-600 hover:text-gray-800 focus:outline-none transition-transform duration-300">
+                            <i class="fas fa-moon w-6 h-6"></i>
+                        </button>
+                    </div>
+                    <div id="routes" class="space-y-3"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom-Right Logo -->
+    <img src="logo.png" alt="Free2Go Logo" class="logo-bottom-right w-16 h-16 sm:w-20 sm:h-20">
+
+    <script>
+        let map;
+        let routeLayers = [];
+        const apiKey = "36aab583524947168d1f39b03515aeaf"; // Replace with your API Key
+        let routeData = [];
+
+        function initMap() {
+            map = L.map('map').setView([12.9716, 77.5946], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+        }
+
+        function formatDistance(meters) {
+            const km = meters / 1000;
+            return `${km.toFixed(1)} km`;
+        }
+
+        function formatDuration(seconds) {
+            const minutes = Math.round(seconds / 60);
+            return `${minutes} mins`;
+        }
+
+        async function getRoutes() {
+            const loadingOverlay = document.getElementById("loadingOverlay");
+            loadingOverlay.classList.add("active");
+
+            const params = new URLSearchParams(window.location.search);
+            let startLocation = params.get("start");
+            let endLocation = params.get("end");
+
+            if (!startLocation || !endLocation) {
+                alert("Start or End location missing!");
+                loadingOverlay.classList.remove("active");
+                return;
+            }
+
+            let [startLat, startLng] = startLocation.split(",");
+            let [endLat, endLng] = endLocation.split(",");
+
+            const routeRequests = [
+                { url: `https://api.geoapify.com/v1/routing?waypoints=${startLat},${startLng}|${endLat},${endLng}&mode=drive&apiKey=${apiKey}`, type: "Standard", icon: "car" },
+                { url: `https://api.geoapify.com/v1/routing?waypoints=${startLat},${startLng}|${endLat},${endLng}&mode=drive&traffic=free_flow&apiKey=${apiKey}`, type: "Less Traffic", icon: "road" },
+                { url: `https://api.geoapify.com/v1/routing?waypoints=${startLat},${startLng}|${endLat},${endLng}&mode=walk&apiKey=${apiKey}`, type: "Wheelchair Accessible", icon: "wheelchair" }
+            ];
+
+            routeData = [];
+            for (const req of routeRequests) {
+                try {
+                    let response = await fetch(req.url);
+                    let data = await response.json();
+                    console.log(`${req.type} API response:`, data);
+
+                    if (data.features && data.features.length > 0) {
+                        const properties = data.features[0].properties;
+                        routeData.push({
+                            ...data.features[0],
+                            routeType: req.type,
+                            icon: req.icon,
+                            properties: {
+                                ...properties,
+                                time: formatDuration(properties.time),
+                                distance: formatDistance(properties.distance)
+                            }
+                        });
+                    } else {
+                        console.warn(`No valid route for ${req.type}`);
+                    }
+                } catch (error) {
+                    console.error(`Error fetching ${req.type} route:`, error);
+                }
+            }
+
+            if (routeData.length < 3 && routeData.some(route => route.routeType === "Standard")) {
+                const standardRoute = routeData.find(route => route.routeType === "Standard");
+                while (routeData.length < 3) {
+                    routeData.push({
+                        ...standardRoute,
+                        routeType: routeData.length === 1 ? "Less Traffic (Fallback)" : "Wheelchair Accessible (Fallback)",
+                        icon: routeData.length === 1 ? "road" : "wheelchair",
+                        properties: {
+                            ...standardRoute.properties,
+                            time: routeData.length === 1 ? standardRoute.properties.time : formatDuration(standardRoute.properties.time * 11.75),
+                            distance: standardRoute.properties.distance
+                        }
+                    });
+                }
+            }
+
+            loadingOverlay.classList.remove("active");
+
+            if (routeData.length === 0) {
+                alert("No routes found! Please try again.");
+                return;
+            }
+
+            displayRoutes(routeData);
+            displayRoutesOnMap(routeData, startLat, startLng, endLat, endLng);
+        }
+
+        function displayRoutes(routes) {
+            let resultsDiv = document.getElementById("routes");
+            resultsDiv.innerHTML = "";
+
+            const colors = ['border-blue-500 bg-blue-50', 'border-green-500 bg-green-50', 'border-orange-500 bg-orange-50'];
+            routes.forEach((route, index) => {
+                let duration = route.properties.time;
+                let distance = route.properties.distance;
+                let note = route.routeType.includes("Wheelchair Accessible")
+                    ? `<p class='text-xs text-gray-500 mt-1'>Note: Uses pedestrian paths, may not be fully accessible.</p>`
+                    : "";
+
+                let routeDiv = document.createElement("div");
+                routeDiv.className = `route-card bg-white p-4 rounded-lg shadow-sm border-l-4 ${colors[index]} cursor-pointer animate-slide-in`;
+                routeDiv.style.animationDelay = `${index * 0.1}s`;
+                routeDiv.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <i class="fas fa-${route.icon} text-xl mr-3 text-${colors[index].split('-')[1]}-600"></i>
+                            <div>
+                                <h3 class="text-base font-semibold text-gray-900">${route.routeType}</h3>
+                                <p class="text-sm text-gray-600">${duration} | ${distance}</p>
+                                ${note}
+                            </div>
+                        </div>
+                        <button class="btn-gradient text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-all"
+                                onclick="selectRoute(${index})">Select</button>
+                    </div>
+                `;
+                routeDiv.addEventListener('click', () => highlightRoute(index));
+                resultsDiv.appendChild(routeDiv);
+            });
+        }
+
+        function displayRoutesOnMap(routes, startLat, startLng, endLat, endLng) {
+            routeLayers.forEach(layer => map.removeLayer(layer));
+            routeLayers = [];
+
+            L.marker([startLat, startLng]).addTo(map).bindPopup("Start").openPopup();
+            L.marker([endLat, endLng]).addTo(map).bindPopup("End");
+
+            const colors = ['#2563EB', '#16A34A', '#EA580C'];
+            routes.forEach((route, index) => {
+                const coordinates = route.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
+                const polyline = L.polyline(coordinates, {
+                    color: colors[index],
+                    weight: 5,
+                    opacity: index === 0 ? 1 : 0.85
+                }).addTo(map);
+                routeLayers.push(polyline);
+            });
+
+            const bounds = L.latLngBounds([
+                [startLat, startLng],
+                [endLat, endLng]
+            ]);
+            map.fitBounds(bounds, { padding: [50, 50] });
+        }
+
+        function highlightRoute(index) {
+            const colors = ['#2563EB', '#16A34A', '#EA580C'];
+            routeLayers.forEach((layer, i) => {
+                layer.setStyle({
+                    color: i === index ? colors[i] : '#D1D5DB',
+                    weight: i === index ? 7 : 4,
+                    opacity: i === index ? 1 : 0.5
+                });
+            });
+        }
+
+        function selectRoute(index) {
+            let selectedRoute = JSON.stringify(routeData[index]);
+            localStorage.setItem("selectedRoute", selectedRoute);
+            window.location.href = "navigate.html";
+        }
+
+        // Theme toggle
+        const body = document.getElementById("body");
+        const themeToggle = document.getElementById("themeToggle");
+        themeToggle.addEventListener("click", () => {
+            body.classList.toggle("night-mode");
+            const icon = themeToggle.querySelector("i");
+            icon.classList.toggle("fa-moon");
+            icon.classList.toggle("fa-sun");
+        });
+
+        window.onload = function() {
+            initMap();
+            getRoutes();
+        };
+    </script>
+</body>
+</html>

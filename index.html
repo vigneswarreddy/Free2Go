@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free2Go - Smart Navigation System</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+    }
+    .nav-link {
+      transition: color 0.3s ease, transform 0.2s ease;
+    }
+    .nav-link:hover {
+      color: #00A8E8;
+      transform: translateY(-2px);
+    }
+    .hero-section {
+      background: linear-gradient(135deg, rgba(0, 168, 232, 0.9), rgba(0, 82, 156, 0.9)), url('https://source.unsplash.com/random/1600x900/?city');
+      background-size: cover;
+      background-position: center;
+      clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    }
+    .feature-card, .workflow-step {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .feature-card:hover, .workflow-step:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    @media (max-width: 640px) {
+      .hero-section {
+        clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+      }
+      .nav-logo {
+        width: 120px;
+      }
+    }
+    @media (max-width: 768px) {
+      .nav-link {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <!-- Header -->
+  <header class="bg-white shadow-md sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="index.html" class="flex items-center">
+        <img src="word Logo 2.png" alt="Free2Go Logo" class="nav-logo h-10">
+      </a>
+      <nav class="hidden md:flex space-x-4">
+        <a href="#accessibility" class="nav-link text-gray-700 hover:text-blue-500">Accessibility</a>
+        <a href="#features" class="nav-link text-gray-700 hover:text-blue-500">Features</a>
+        <a href="#help" class="nav-link text-gray-700 hover:text-blue-500">Help</a>
+        <a href="#how-it-works" class="nav-link text-gray-700 hover:text-blue-500">How It Works</a>
+        <a href="login.html" class="nav-link bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600">Get Started</a>
+      </nav>
+      <div class="flex items-center space-x-4">
+        <a href="login.html" class="text-gray-700 hover:text-blue-500">Log in</a>
+        <button id="mobile-menu-btn" class="md:hidden focus:outline-none">
+          <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <nav id="mobile-menu" class="hidden md:hidden bg-white shadow-md">
+      <a href="#accessibility" class="block py-2 px-4 text-gray-700 hover:bg-blue-50">Accessibility</a>
+      <a href="#features" class="block py-2 px-4 text-gray-700 hover:bg-blue-50">Features</a>
+      <a href="#help" class="block py-2 px-4 text-gray-700 hover:bg-blue-50">Help</a>
+      <a href="#how-it-works" class="block py-2 px-4 text-gray-700 hover:bg-blue-50">How It Works</a>
+      <a href="login.html" class="block py-2 px-4 text-white bg-blue-500 hover:bg-blue-600">Get Started</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section text-white py-20 md:py-32">
+    <div class="container mx-auto px-4 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4 fade-in">Explore Cities with Free2Go</h1>
+      <p class="text-lg md:text-xl max-w-2xl mx-auto mb-8 fade-in">Real-time public transport and wheelchair-friendly navigation powered by OpenRouteService and OpenStreetMap.</p>
+      <a href="login.html" class="inline-block bg-white text-blue-500 font-semibold py-3 px-8 rounded-lg hover:bg-gray-100 transition transform hover:scale-105 fade-in">Get Started</a>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section id="how-it-works" class="container mx-auto px-4 py-16">
+    <h2 class="text-3xl font-bold text-gray-800 mb-12 text-center fade-in">How Free2Go Works</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="workflow-step bg-white p-6 rounded-lg shadow-md text-center fade-in">
+        <svg class="w-12 h-12 text-blue-500 mb-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+        </svg>
+        <h3 class="text-xl font-semibold text-gray-800 mb-2">Set Your Route</h3>
+        <p class="text-gray-600">Pin your start and destination points on the interactive map.</p>
+      </div>
+      <div class="workflow-step bg-white p-6 rounded-lg shadow-md text-center fade-in">
+        <svg class="w-12 h-12 text-blue-500 mb-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553-2.276A1 1 0 0021 13.382V6.618a1 1 0 00-1.447-.894L15 7"></path>
+        </svg>
+        <h3 class="text-xl font-semibold text-gray-800 mb-2">Choose Your Path</h3>
+        <p class="text-gray-600">Select from accessible routes or public transport options.</p>
+      </div>
+      <div class="workflow-step bg-white p-6 rounded-lg shadow-md text-center fade-in">
+        <svg class="w-12 h-12 text-blue-500 mb-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+        <h3 class="text-xl font-semibold text-gray-800 mb-2">Navigate Seamlessly</h3>
+        <p class="text-gray-600">Follow voice-guided, real-time directions to your destination.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="bg-white py-16">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-gray-800 mb-12 text-center fade-in">Why Choose Free2Go</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="feature-card bg-gray-50 p-6 rounded-lg shadow-md text-center fade-in">
+          <svg class="w-12 h-12 text-blue-500 mb-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+          <h3 class="text-xl font-semibold text-gray-800 mb-2">Accessible Navigation</h3>
+          <p class="text-gray-600">Find step-free routes with ramps and elevators for mobility-impaired users.</p>
+        </div>
+        <div class="feature-card bg-gray-50 p-6 rounded-lg shadow-md text-center fade-in">
+          <svg class="w-12 h-12 text-blue-500 mb-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3"></path>
+          </svg>
+          <h3 class="text-xl font-semibold text-gray-800 mb-2">Live Transit Updates</h3>
+          <p class="text-gray-600">Real-time data on buses, metros, and trains for efficient travel.</p>
+        </div>
+        <div class="feature-card bg-gray-50 p-6 rounded-lg shadow-md text-center fade-in">
+          <svg class="w-12 h-12 text-blue-500 mb-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+          </svg>
+          <h3 class="text-xl font-semibold text-gray-800 mb-2">Interactive Maps</h3>
+          <p class="text-gray-600">Explore routes with Leaflet.js and OpenStreetMap integration.</p>
+        </div>
+        <div class="feature-card bg-gray-50 p-6 rounded-lg shadow-md text-center fade-in">
+          <svg class="w-12 h-12 text-blue-500 mb-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path>
+          </svg>
+          <h3 class="text-xl font-semibold text-gray-800 mb-2">Voice Navigation</h3>
+          <p class="text-gray-600">Hands-free, turn-by-turn audio guidance with text-to-speech support.</p>
+        </div>
+        <div class="feature-card bg-gray-50 p-6 rounded-lg shadow-md text-center fade-in">
+          <svg class="w-12 h-12 text-blue-500 mb-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <h3 class="text-xl font-semibold text-gray-800 mb-2">Alternative Routes</h3>
+          <p class="text-gray-600">Multiple travel options based on traffic and transit conditions.</p>
+        </div>
+        <div class="feature-card bg-gray-50 p-6 rounded-lg shadow-md text-center fade-in">
+          <svg class="w-12 h-12 text-blue-500 mb-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4l4 4"></path>
+          </svg>
+          <h3 class="text-xl font-semibold text-gray-800 mb-2">API Integration</h3>
+          <p class="text-gray-600">Seamless routing with OpenRouteService and Google Maps APIs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Accessibility Section -->
+  <section id="accessibility" class="container mx-auto px-4 py-16">
+    <h2 class="text-3xl font-bold text-gray-800 mb-12 text-center fade-in">Accessible Navigation for All</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white p-6 rounded-lg shadow-md fade-in">
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Wheelchair-Friendly Routes</h3>
+        <p class="text-gray-600">Free2Go provides step-free paths with ramps, elevators, and accessible transit stations, tailored for mobility-impaired users.</p>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow-md fade-in">
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Inclusive Design</h3>
+        <p class="text-gray-600">Our app supports voice navigation and text-to-speech for visually impaired users, ensuring everyone can travel confidently.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Help Section -->
+  <section id="help" class="bg-white py-16">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-gray-800 mb-12 text-center fade-in">Support When You Need It</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-gray-50 p-6 rounded-lg shadow-md fade-in">
+          <h3 class="text-xl font-semibold text-gray-800 mb-4">Help Center</h3>
+          <p class="text-gray-600">Explore FAQs, tutorials, and guides to master Free2Go’s features.</p>
+          <a href="#" class="inline-block mt-4 text-blue-500 hover:text-blue-600 font-semibold">Visit Help Center</a>
+        </div>
+        <div class="bg-gray-50 p-6 rounded-lg shadow-md fade-in">
+          <h3 class="text-xl font-semibold text-gray-800 mb-4">24/7 Support</h3>
+          <p class="text-gray-600">Contact our team anytime via email or live chat for assistance.</p>
+          <a href="#" class="inline-block mt-4 text-blue-500 hover:text-blue-600 font-semibold">Contact Us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial Section -->
+  <section class="container mx-auto px-4 py-16">
+    <h2 class="text-3xl font-bold text-gray-800 mb-12 text-center fade-in">Hear from Our Users</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white p-6 rounded-lg shadow-md fade-in">
+        <p class="text-gray-600 italic mb-4">"Free2Go’s accessible routes made my daily commute in Delhi so much easier!"</p>
+        <p class="text-gray-800 font-semibold">Anita R.</p>
+      </div>
+      <div class="bg-white p-6 rounded-lg shadow-md fade-in">
+        <p class="text-gray-600 italic mb-4">"The voice navigation is a lifesaver for navigating busy cities hands-free."</p>
+        <p class="text-gray-800 font-semibold">Vikram S.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <section class="bg-blue-500 text-white py-12">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl font-bold mb-4 fade-in">Start Your Journey Today</h2>
+      <p class="text-lg max-w-2xl mx-auto mb-8 fade-in">Experience accessible, real-time navigation with Free2Go.</p>
+      <a href="login.html" class="inline-block bg-white text-blue-500 font-semibold py-3 px-8 rounded-lg hover:bg-gray-100 transition transform hover:scale-105 fade-in">Get Started</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-4">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-4 md:mb-0">
+          <img src="logo.png" alt="Free2Go Logo" class="h-20">
+        </div>
+        <div class="flex space-x-6">
+          <a href="#" class="text-sm hover:text-blue-200">Privacy Policy</a>
+          <a href="#" class="text-sm hover:text-blue-200">Terms of Service</a>
+          <a href="#" class="text-sm hover:text-blue-200">Contact</a>
+        </div>
+      </div>
+      <div class="mt-4 text-center text-sm">
+        <p>© 2025 Free2Go. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Fade-in animation on scroll
+    const fadeIns = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    fadeIns.forEach(element => observer.observe(element));
+  </script>
+</body>
+</html>
