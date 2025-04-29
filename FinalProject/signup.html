@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+    <!-- Particles.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+
+    <style>
+        /* Custom Animations */
+        .animate-slide-in {
+            animation: slideIn 0.6s ease-out forwards;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-pulse-slow {
+            animation: pulse 3s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .spinner {
+            width: 1.5rem;
+            height: 1.5rem;
+            border: 3px solid #e5e7eb;
+            border-top: 3px solid #4F46E5;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Glassmorphism Card */
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(240, 245, 255, 0.85));
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(79, 70, 229, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        /* Input Focus Animation */
+        .input-focus {
+            transition: all 0.3s ease;
+        }
+        .input-focus:focus {
+            transform: scale(1.02);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+        /* Button Gradient */
+        .btn-gradient {
+            background: linear-gradient(135deg, #4F46E5, #7C3AED);
+            transition: all 0.3s ease;
+        }
+        .btn-gradient:hover {
+            background: linear-gradient(135deg, #4338CA, #6D28D9);
+            transform: translateY(-2px);
+        }
+        /* Particles */
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        /* Night Mode */
+        .night-mode {
+            background: linear-gradient(135deg, #1e3a8a, #4c1d95);
+        }
+        .night-mode .glass-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .night-mode .text-gray-800 {
+            color: #e5e7eb;
+        }
+        .night-mode .text-gray-700 {
+            color: #d1d5db;
+        }
+        .night-mode .bg-white {
+            background: rgba(31, 41, 55, 0.8);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100 min-h-screen font-sans flex items-center justify-center p-4" id="body">
+    <div id="particles-js"></div>
+    <div class="glass-card p-8 sm:p-10 rounded-3xl w-full max-w-md animate-slide-in relative">
+        <!-- Theme Toggle -->
+        <button id="themeToggle" class="absolute top-4 right-4 text-gray-600 hover:text-gray-800 focus:outline-none transition-transform duration-300">
+            <i class="fas fa-moon w-6 h-6"></i>
+        </button>
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="flex justify-center mb-4">
+                <i class="fas fa-user-plus text-4xl text-indigo-600 animate-pulse-slow"></i>
+            </div>
+            <h2 class="text-3xl font-extrabold text-gray-800">Create Account</h2>
+            <p class="text-sm text-gray-500 mt-2">Join us to explore your journey</p>
+        </div>
+
+        <!-- Form -->
+        <form id="signupForm" class="space-y-6">
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                        <i class="fas fa-user text-gray-400"></i>
+                    </span>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        placeholder="Enter username" 
+                        required 
+                        class="input-focus w-full pl-10 p-3 border border-gray-200 rounded-xl bg-white text-gray-700 focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
+                    >
+                </div>
+            </div>
+
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                        <i class="fas fa-envelope text-gray-400"></i>
+                    </span>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        placeholder="Enter email" 
+                        required 
+                        class="input-focus w-full pl-10 p-3 border border-gray-200 rounded-xl bg-white text-gray-700 focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
+                    >
+                </div>
+            </div>
+
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                        <i class="fas fa-lock text-gray-400"></i>
+                    </span>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        placeholder="Enter password" 
+                        required 
+                        class="input-focus w-full pl-10 p-3 border border-gray-200 rounded-xl bg-white text-gray-700 focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
+                    >
+                </div>
+            </div>
+
+            <div>
+                <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                        <i class="fas fa-lock text-gray-400"></i>
+                    </span>
+                    <input 
+                        type="password" 
+                        id="confirmPassword" 
+                        placeholder="Confirm password" 
+                        required 
+                        class="input-focus w-full pl-10 p-3 border border-gray-200 rounded-xl bg-white text-gray-700 focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
+                    >
+                </div>
+            </div>
+
+            <p id="signupStatus" class="text-sm text-center hidden"></p>
+
+            <button 
+                type="submit" 
+                id="signupButton" 
+                class="w-full btn-gradient text-white px-4 py-3 rounded-xl font-medium hover:shadow-lg flex items-center justify-center"
+            >
+                <i class="fas fa-user-plus mr-2"></i>Sign Up
+                <span id="signupSpinner" class="spinner ml-3 hidden"></span>
+            </button>
+        </form>
+
+        <!-- Footer -->
+        <div class="text-center mt-6">
+            <p class="text-sm text-gray-500">
+                Already have an account? 
+                <a href="login.html" class="text-indigo-600 font-medium hover:text-indigo-800 hover:underline">Sign in</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Particles.js initialization
+        particlesJS("particles-js", {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: "#ffffff" },
+                shape: { type: "circle" },
+                opacity: { value: 0.5, random: true },
+                size: { value: 3, random: true },
+                line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.4, width: 1 },
+                move: { enable: true, speed: 2, direction: "none", random: true }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" } },
+                modes: { repulse: { distance: 100, duration: 0.4 }, push: { particles_nb: 4 } }
+            }
+        });
+
+        // Theme toggle
+        const body = document.getElementById("body");
+        const themeToggle = document.getElementById("themeToggle");
+        themeToggle.addEventListener("click", () => {
+            body.classList.toggle("night-mode");
+            const icon = themeToggle.querySelector("i");
+            icon.classList.toggle("fa-moon");
+            icon.classList.toggle("fa-sun");
+        });
+
+        // Signup form handling
+        let isSigningUp = false;
+
+        document.getElementById("signupForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            if (isSigningUp) return;
+
+            const username = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            const signupButton = document.getElementById("signupButton");
+            const signupSpinner = document.getElementById("signupSpinner");
+            const signupStatus = document.getElementById("signupStatus");
+
+            // Validate password match
+            if (password !== confirmPassword) {
+                signupStatus.classList.remove("hidden");
+                signupStatus.classList.remove("text-green-500");
+                signupStatus.classList.add("text-red-500");
+                signupStatus.textContent = "Passwords do not match.";
+                return;
+            }
+
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                signupStatus.classList.remove("hidden");
+                signupStatus.classList.remove("text-green-500");
+                signupStatus.classList.add("text-red-500");
+                signupStatus.textContent = "Please enter a valid email address.";
+                return;
+            }
+
+            isSigningUp = true;
+            signupButton.disabled = true;
+            signupButton.classList.add("opacity-75", "cursor-not-allowed");
+            signupSpinner.classList.remove("hidden");
+            signupStatus.classList.add("hidden");
+
+            // Simulate API call delay and store data in localStorage
+            setTimeout(() => {
+                // Store user data in localStorage
+                const users = JSON.parse(localStorage.getItem("users")) || [];
+                
+                // Check if username or email already exists
+                if (users.some(user => user.username === username)) {
+                    signupSpinner.classList.add("hidden");
+                    signupButton.disabled = false;
+                    signupButton.classList.remove("opacity-75", "cursor-not-allowed");
+                    signupStatus.classList.remove("hidden");
+                    signupStatus.classList.remove("text-green-500");
+                    signupStatus.classList.add("text-red-500");
+                    signupStatus.textContent = "Username already exists.";
+                    isSigningUp = false;
+                    return;
+                }
+                if (users.some(user => user.email === email)) {
+                    signupSpinner.classList.add("hidden");
+                    signupButton.disabled = false;
+                    signupButton.classList.remove("opacity-75", "cursor-not-allowed");
+                    signupStatus.classList.remove("hidden");
+                    signupStatus.classList.remove("text-green-500");
+                    signupStatus.classList.add("text-red-500");
+                    signupStatus.textContent = "Email already registered.";
+                    isSigningUp = false;
+                    return;
+                }
+
+                users.push({ username, email, password });
+                localStorage.setItem("users", JSON.stringify(users));
+
+                // Show success message and redirect
+                signupSpinner.classList.add("hidden");
+                signupStatus.classList.remove("hidden");
+                signupStatus.classList.remove("text-red-500");
+                signupStatus.classList.add("text-green-500");
+                signupStatus.textContent = "Signup successful! Redirecting to login...";
+                
+                setTimeout(() => {
+                    window.location.href = "login.html";
+                }, 1000);
+            }, 1000); // Simulate API call delay
+        });
+    </script>
+</body>
+</html>
